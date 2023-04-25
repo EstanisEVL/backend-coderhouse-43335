@@ -1,61 +1,89 @@
-/* 
-Clases con ECMAScript y ECMAScript avanzado:
+// Clases con ECMAScript y ECMAScript avanzado:
 
-Consigna: Realizar una clase “ProductManager” que gestione un conjunto de productos.
+class ProductManager {
+  constructor() {
+    this.products = [];
+    this.id = 0;
+  }
 
-Aspectos a incluir:
-Debe crearse desde su constructor con el elemento products, el cual será un arreglo vacío.
+  getProducts = () => {
+    return this.products;
+  };
 
-Cada producto que gestione debe contar con las propiedades:
-- title (nombre del producto)
-- description (descripción del producto)
-- price (precio)
-- thumbnail (ruta de imagen)
-- code (código identificador)
-- stock (número de piezas disponibles)
+  addProduct = (title, description, price, thumbnail, code, stock) => {
+    const product = { title, description, price, thumbnail, code, stock };
+    if (this.products.some((p) => p.code === code)) {
+      console.log("Error: el producto ya existe.");
+      return;
+    }
 
-Debe contar con un método “addProduct” el cual agregará un producto al arreglo de productos inicial:
-- Validar que no se repita el campo “code” y que todos los campos sean obligatorios
-- Al agregarlo, debe crearse con un id autoincrementable
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      console.log("Error: todos los campos son requeridos.");
+      return;
+    }
+    if (this.products.length === 0) {
+      product.id = 1;
+    } else {
+      product.id = this.products[this.products.length - 1].id + 1;
+    }
 
-Debe contar con un método “getProducts” el cual debe devolver el arreglo con todos los productos creados hasta ese momento
+    this.products.push(product);
+  };
 
-Debe contar con un método “getProductById” el cual debe buscar en el arreglo el producto que coincida con el id:
-- En caso de no coincidir ningún id, mostrar en consola un error “Not found”
+  getProductById = (id) => {
+    const productIndex = this.products.findIndex(
+      (product) => product.id === id
+    );
+    if (id === 0) {
+      console.log("Error: id inexistente");
+    }
+    if (productIndex === -1) {
+      console.log("Error: producto no encontrado");
+    } else {
+      console.log(this.products[productIndex]);
+    }
+  };
+}
+// ✓	Se creará una instancia de la clase “ProductManager”:
+const manager = new ProductManager();
 
-----------------------------------------------------------------------------------------------------------------------------
+// ✓	Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío []:
+console.log(manager.getProducts());
 
-Testing:
-✓	Se llamará al método “addProduct” con los campos:
+/* ✓	Se llamará al método “addProduct” con los campos:
   -	title: “producto prueba”
   -	description:”Este es un producto prueba”
   -	price:200,
   -	thumbnail:”Sin imagen”
   -	code:”abc123”,
   -	stock:25
-✓	El objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
-✓	Se llamará el método “getProducts” nuevamente, esta vez debe aparecer el producto recién agregado
-✓	Se llamará al método “addProduct” con los mismos campos de arriba, debe arrojar un error porque el código estará repetido.
-✓	Se evaluará que getProductById devuelva error si no encuentra el producto o el producto en caso de encontrarlo
-
 */
 
-class ProductManager {
-  constructor(title, description, price, thumbnail, code, stock){
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.thumbnail = thumbnail;
-    this.code = code;
-    this.stock = stock;
-  }
+manager.addProduct(
+  "producto prueba",
+  "Este es un producto prueba",
+  200,
+  "Sin imagen",
+  "abc123",
+  25
+);
 
-  getProducts = () => {
-    console.log([]);
-  }
-}
-// ✓	Se creará una instancia de la clase “ProductManager”:
-const product = new ProductManager();
+// ✓	El objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
+// ✓	Se llamará el método “getProducts” nuevamente, esta vez debe aparecer el producto recién agregado:
 
-// ✓	Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío []:
-console.log(product);
+console.log(manager.getProducts());
+
+// ✓	Se llamará al método “addProduct” con los mismos campos de arriba, debe arrojar un error porque el código estará repetido:
+
+manager.addProduct(
+  "producto prueba",
+  "Este es un producto prueba",
+  200,
+  "Sin imagen",
+  "abc123",
+  25
+);
+
+// ✓	Se evaluará que getProductById devuelva error si no encuentra el producto o el producto en caso de encontrarlo:
+
+manager.getProductById(1);
