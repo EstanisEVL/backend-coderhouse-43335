@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     product.category
   ) {
     await manager.addProduct(product);
-    res.status(200).send({ status: "success", message: "Create products" });
+    res.status(200).send({ status: "success", message: "Created product", payload: product});
   } else return res.status(400).send({status: "error", message: "Ingrese todos los campos requeridos"})
 });
 
