@@ -1,0 +1,152 @@
+[
+	{
+		"title": "pokemon",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 1
+	},
+	{
+		"title": "pokemon2",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 2
+	},
+	{
+		"title": "pokemon3",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 3
+	},
+	{
+		"title": "pokemon4",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 4
+	},
+	{
+		"title": "pokemon5",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 5
+	},
+	{
+		"title": "pokemon6",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 6
+	},
+	{
+		"title": "pokemon7",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 7
+	},
+	{
+		"title": "pokemon8",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 8
+	},
+	{
+		"title": "pokemon9",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 9
+	},
+	{
+		"title": "pokemon10",
+		"description": "funko",
+		"code": 1568,
+		"price": 10,
+		"status": "available",
+		"stock": 5,
+		"category": "women's clothing",
+		"id": 10
+	},
+	{
+		"title": "prueba1",
+		"description": "prueba1",
+		"code": "2",
+		"price": "2",
+		"status": "prueba1",
+		"stock": "2",
+		"category": "prueba1",
+		"id": 11
+	},
+	{
+		"title": "prueba1",
+		"description": "prueba1",
+		"code": "1",
+		"price": "1",
+		"status": "prueba1",
+		"stock": "1",
+		"category": "prueba1",
+		"id": 12
+	},
+	{
+		"title": "prueba1",
+		"description": "prueba1",
+		"code": "1",
+		"price": "1",
+		"status": "prueba1",
+		"stock": "6",
+		"category": "prueba1",
+		"id": 13
+	},
+	{
+		"title": "productoDePrueba",
+		"description": "productoDePrueba",
+		"code": "1",
+		"price": "2",
+		"status": "productoDePrueba",
+		"stock": "3",
+		"category": "productoDePrueba",
+		"id": 14
+	},
+	{
+		"title": "asdasda",
+		"description": "asdasda",
+		"code": "4",
+		"price": "5",
+		"status": "asdasda",
+		"stock": "21",
+		"category": "asdasda",
+		"id": 15
+	}
+]
