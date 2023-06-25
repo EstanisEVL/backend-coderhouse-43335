@@ -1,10 +1,9 @@
-import cartsModel from "../models/carts.models";
+import cartsModel from "../models/carts.models.js";
 
 class CartsManager {
   getCarts = async () => {
     try {
       const allCarts = await cartsModel.find();
-
       return allCarts;
     } catch (err) {
       console.log(
@@ -57,30 +56,32 @@ class CartsManager {
       return;
     }
 
-    const carts = await cartsModel.find();
+    try {
+      const carts = await cartsModel.find();
+      const cartIndex = carts.findIndex((cart) => cart.id === cid);
 
-    const cartIndex = carts.findIndex((cart) => cart.id === cid);
-
-    if (cartIndex !== -1) {
-      const cart = carts[cartIndex];
-      const existingProduct = cart.products.find(
-        (item) => item.product === pid
-      );
-
-      if (existingProduct) {
-        existingProduct.quantity++;
+      if (cartIndex !== -1) {
+        const cart = carts[cartIndex];
+        const existingProduct = cart.products.find(
+          (item) => item.product === pid
+        );
+  
+        if (existingProduct) {
+          existingProduct.quantity++;
+        } else {
+          const product = {
+            product: pid,
+            quantity: 1,
+          };
+          cart.products.push(product);
+        }
+        await cart.save();
+        return cart;
       } else {
-        const product = {
-          product: pid,
-          quantity: 1,
-        };
-        cart.products.push(product);
+        return console.log("Error: carrito no encontrado");
       }
-      // await cartsModel.create({})
-      // fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"));
-      return cart;
-    } else {
-      return console.log("Error: carrito no encontrado");
+    } catch (err) {
+      console.log("🚀 ~ file: carts.manager.js:84 ~ router.post ~ error:", err);
     }
   };
 };

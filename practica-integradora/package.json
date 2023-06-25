@@ -2,13 +2,11 @@
   "name": "practica-integradora",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./src/index",
-    "start:prod": "cross-env NODE_ENV=production nodemon ./src/index",
-    "start:test": "cross-env NODE_ENV=test nodemon ./src/index"
+    "start": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",

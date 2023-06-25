@@ -4,7 +4,6 @@ config({
   path: `.env.${process.env.NODE_ENV || "development"}.local`,
 });
 
-// REVISAR SI ESTÁ BIEN HECHA LA EXPORTACIÓN
 const {
   API_VERSION,
   NODE_ENV,
