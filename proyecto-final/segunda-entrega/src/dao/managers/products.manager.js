@@ -1,0 +1,1 @@
+// Adaptar acá los métodos del ProductManager para que utilice Mongoose en vez de file system:
