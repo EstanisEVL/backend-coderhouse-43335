@@ -1,0 +1,37 @@
+<div>
+  <h1>LISTA DE PRODUCTOS</h1>
+  {{log products}}
+
+  {{#each products}}
+    <p>{{this.title}}</p>
+  {{/each}}
+
+  <div>
+    <p>Pagina actual {{page}}</p>
+  </div>
+
+  {{#if hasPrevPage}}
+    <p>Pagina previa {{prevPage}}</p>
+    <a href="/api/views/products?page={{prevPage}}"><button
+      >Anterior</button></a>
+  {{/if}}
+
+  {{#if hasNextPage}}
+    <p>Pagina siguiente {{nextPage}}</p>
+    <a href="/api/views/products?page={{nextPage}}"><button
+      >Siguiente</button></a>
+  {{/if}}
+
+  {{!-- {{#if !hasPrevPage}}
+    <p>Pagina siguiente {{prevLink}}</p>
+    <a href="/api/views/products?page={{prevLink}}"><button
+      >Anterior</button></a>
+  {{/if}}
+
+  {{#if !hasNextPage}}
+    <p>Pagina siguiente {{nextLink}}</p>
+    <a href="/api/views/products?page={{nextLink}}"><button
+      >Siguiente</button></a>
+  {{/if}} --}}
+
+</div>

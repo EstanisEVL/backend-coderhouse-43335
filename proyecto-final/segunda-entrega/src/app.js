@@ -1,10 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
+import handlebars from "express-handlebars";
 import displayRoutes from "express-routemap";
 import __dirname from "./utils.js";
 
 // Importar rutas:
-
+import productsRouter from "./routes/products.router.js";
+import viewsRouter from "./routes/views.router.js";
 
 // Variables:
 const app = express();
@@ -15,6 +17,11 @@ const MONGO_URL = "mongodb+srv://estanislaovl:AGqTG7UAgI5ZaU3W@ecommerce.jmbjtvw
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
+
+// Handlebars:
+app.engine("handlebars", handlebars.engine());
+app.set("views", `${__dirname}/views`);
+app.set("view engine", "handlebars");
 
 // Conectar a mongoDb:
 const connection = mongoose
@@ -30,8 +37,9 @@ const connection = mongoose
   });
 
 // Definir rutas:
-// app.use("/api/products/", );
+app.use("/api/products/", productsRouter);
 // app.use("/api/carts/", );
+app.use("/api/views/", viewsRouter);
 
 // Levantar el servidor:
 app.listen(PORT, () => {
