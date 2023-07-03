@@ -32,9 +32,13 @@ const productsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  quantity: {
+    type: Number,
+  },
 });
 
 productsSchema.plugin(mongoosePaginate);
+mongoose.model("products", productsSchema);
 const productsModel = mongoose.model(productsCollection, productsSchema);
 
 export default productsModel;

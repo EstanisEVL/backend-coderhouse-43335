@@ -1,21 +1,26 @@
 import { Router } from "express";
+import cartsModel from "../dao/models/carts.model.js";
 import productsModel from "../dao/models/products.model.js";
 
 const router = Router();
 
-/*
-Crear una vista en el router de views ‘/products’ para visualizar todos los productos con su respectiva paginación. Cada producto mostrado puede resolverse de dos formas:
-Llevar a una nueva vista con el producto seleccionado con su descripción completa, detalles de precio, categoría, etc. Además de un botón para agregar al carrito.
-Contar con el botón de “agregar al carrito” directamente, sin necesidad de abrir una página adicional con los detalles del producto.
-*/
-
+// Vista en el router de views ‘/products’ para visualizar todos los productos con su respectiva paginación.
 router.get("/products", async (req, res) => {
-  const { page = 1, limit= 10 } = req.query;
+  const { page = 1, limit = 10 } = req.query;
 
-  const { docs, totalPages, hasPrevPage, hasNextPage, nextPage, prevPage, prevLink, nextLink } =
-    await productsModel.paginate({}, { limit, page, lean: true });
+  const {
+    docs,
+    totalPages,
+    hasPrevPage,
+    hasNextPage,
+    nextPage,
+    prevPage,
+    prevLink,
+    nextLink,
+  } = await productsModel.paginate({}, { limit, page, lean: true });
 
   res.status(200).render("products", {
+    style: "index.css",
     products: docs,
     page,
     totalPages,
@@ -24,15 +29,51 @@ router.get("/products", async (req, res) => {
     hasPrevPage,
     hasNextPage,
     prevLink,
-    nextLink
-  })
-})
+    nextLink,
+  });
+});
 
-/*
-Además, agregar una vista en ‘/carts/:cid (cartId) para visualizar un carrito específico, donde se deberán listar SOLO los productos que pertenezcan a dicho carrito.
-*/
+// Vista en ‘/carts/:cid para visualizar un carrito específico, donde se listan SOLO los productos que pertenecen a dicho carrito:
 router.get("/carts/:cid", async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const { cid } = req.params;
+  const cart = await cartsModel.findById(cid);
 
-})
+  if (cart) {
+    const products = cart.products.map((product) => product.product._id);
+
+    const {
+      docs,
+      totalPages,
+      hasPrevPage,
+      hasNextPage,
+      nextPage,
+      prevPage,
+      prevLink,
+      nextLink,
+    } = await productsModel.paginate(
+      { _id: { $in: products } },
+      { limit, page, lean: true }
+    );
+
+    res.status(200).render("cart", {
+      style: "index.css",
+      products: docs,
+      page,
+      totalPages,
+      prevPage,
+      nextPage,
+      hasPrevPage,
+      hasNextPage,
+      prevLink,
+      nextLink,
+    });
+  } else {
+    console.log("Carrito inexistente");
+    res.status(400).json({
+      error: "Carrito inexistente",
+    });
+  }
+});
 
 export default router;

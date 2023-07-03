@@ -1,14 +1,126 @@
-/* 
-Métodos crud para el carrito:
-Además, agregar al router de carts los siguientes endpoints:
+import { Router } from "express";
+import CartManager from "../dao/managers/carts.manager.js";
 
-DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
+const router = Router();
 
-PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
+const manager = new CartManager();
 
-PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+router.get("/", async (req, res) => {
+  try {
+    const carts = await manager.getCarts();
 
-DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
+    return res.status(200).json({
+      status: "All carts",
+      payload: { carts },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
-Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products (population). Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo podemos desglosar los productos asociados.
-*/
+router.get("/:cid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const cartById = await manager.getCartById(cid);
+
+    if (!cartById) {
+      return res.status(400).json({
+        status: "error",
+        payload: "Error: id inexistente",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      payload: cartById,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const cart = await manager.createCart();
+    return res.status(200).json({
+      status: "Cart created:",
+      payload: { cart },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/:cid/product/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+
+  try {
+    const cart = await manager.addProductToCart(cid, pid);
+    res
+      .status(200)
+      .json({ message: "Product successfully added to cart: ", cart });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.put("/:cid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+
+    const {page = 1, limit = 10} = req.query;
+
+    const updatedCart = await manager.updateCart(cid, products, page, limit);
+
+    return res.status(200).json({
+      status: "Updated cart:",
+      payload: updatedCart,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const productQuantity = req.body;
+
+    const updatedCart = await manager.updateProductFromCart(cid, pid, productQuantity);
+
+    return res.status(200).json({
+      status: "Updated cart:",
+      payload: updatedCart,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const updatedCart = await manager.deleteProductFromCart(cid, pid);
+    return res.status(200).json({
+      status: "Product deleted from cart: ",
+      payload: updatedCart,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.delete("/:cid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const updatedCart = await manager.deleteAllProductsFromCart(cid);
+    return res.status(200).json({
+      status: "Cart emptied:",
+      payload: updatedCart,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+export default router;

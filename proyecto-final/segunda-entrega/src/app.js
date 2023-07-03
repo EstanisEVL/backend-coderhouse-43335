@@ -4,14 +4,16 @@ import handlebars from "express-handlebars";
 import displayRoutes from "express-routemap";
 import __dirname from "./utils.js";
 
-// Importar rutas:
+// Importación de rutas:
+import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import viewsRouter from "./routes/views.router.js";
 
 // Variables:
 const app = express();
 const PORT = 8080;
-const MONGO_URL = "mongodb+srv://estanislaovl:AGqTG7UAgI5ZaU3W@ecommerce.jmbjtvw.mongodb.net/?retryWrites=true&w=majority";
+const MONGO_URL =
+  "mongodb+srv://estanislaovl:AGqTG7UAgI5ZaU3W@ecommerce.jmbjtvw.mongodb.net/?retryWrites=true&w=majority";
 
 // Middlewares:
 app.use(express.json());
@@ -23,7 +25,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
 
-// Conectar a mongoDb:
+// Conección a mongoDb:
 const connection = mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -36,15 +38,15 @@ const connection = mongoose
     console.log("🚀 ~ file: app.js:28 ~ ERROR:", err);
   });
 
-// Definir rutas:
+// Rutas:
+app.use("/api/carts/", cartsRouter);
 app.use("/api/products/", productsRouter);
-// app.use("/api/carts/", );
 app.use("/api/views/", viewsRouter);
 
-// Levantar el servidor:
+// Levanta el servidor:
 app.listen(PORT, () => {
   displayRoutes(app);
   console.log(`================================`);
   console.log(`🚀 App listening on port: ${PORT}`);
   console.log(`================================`);
-})
+});
