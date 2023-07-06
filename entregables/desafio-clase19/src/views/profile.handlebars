@@ -1,0 +1,17 @@
+<div>
+  {{!-- CAMBIAR POR VISTA DE PRODUCTOS --}}
+  <h1>Perfil del usuario</h1>
+
+  <div>
+    <p>¡Bienvenid@!</p>
+    <p>{{this.last_name}}</p>
+    <p>{{this.age}}</p>
+    <p>{{this.email}}</p>
+  </div>
+
+  <div>
+    <form action="/api/session/logout" method="get">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+  </div>
+</div>
