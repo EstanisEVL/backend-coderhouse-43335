@@ -28,7 +28,6 @@ app.use(
       mongoUrl: MONGO_URL,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 60,
-      // ttl: 60*3600,
     }),
     secret: "secretSession",
     resave: false,

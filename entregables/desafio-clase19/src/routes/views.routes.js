@@ -3,27 +3,25 @@ import authMdw from "../middleware/auth.middleware.js";
 
 const router = Router();
 
+router.get("/", async (req, res) => {
+  res.redirect("/login");
+});
+
 router.get("/login", async (req, res) => {
-  res.render("login");
-})
+  res.render("login", {style: "styles.css"});
+});
 
 router.get("/register", async (req, res) => {
-  res.render("register");
-})
+  res.render("register", {style: "styles.css"});
+});
 
-// Agregar middleware de AUTH
 router.get("/profile", authMdw, async (req, res) => {
   const user = req.session.user;
   console.log(user);
-  // Cambiar por cartModel:
-  res.render("profile", {
+  res.status(200).render("profile", {
+    style: "styles.css",
     user,
-    carrito: {
-      carritoId: "carrito-1",
-      productos: [{productoId: "1", nombre: "camisa"}],
-    }
   });
-
-})
+});
 
 export default router;
