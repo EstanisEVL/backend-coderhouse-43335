@@ -40,7 +40,8 @@ main {
 
 .login-section,
 .register-section,
-.main-section {
+.main-section,
+.admin-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -63,6 +64,8 @@ main {
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+  text-transform: uppercase;
+  user-select: none;
 }
 
 .text-container {
@@ -155,7 +158,6 @@ main {
 .card-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2rem;
   margin-top: 2rem;
   max-width: 100%;
@@ -166,19 +168,46 @@ main {
   background-color: #f9f9f9;
   color: #363732;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   padding: 2rem;
-  width: 50%;
   transition: all 0.5s ease;
   box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
   -webkit-box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
 }
 
-.product-card:hover {
+.product-card_profile {
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  color: #363732;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  transition: all 0.5s ease;
+  box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 10px 10px 49px 0px rgba(0, 0, 0, 0.25);
+}
+
+.product-card:hover, .product-card_profile:hover {
   transform: scale(1.1);
+}
+
+.product-card_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.product-card_content-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .product-card_category {
@@ -186,6 +215,11 @@ main {
 }
 
 .product-card_title {
+  font-size: 1.5rem;
+  max-width: 70%;
+}
+
+.product-card_title-profile {
   font-size: 1.5rem;
 }
 
@@ -198,11 +232,40 @@ main {
   font-weight: 700;
 }
 
+.product-card_btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 25%;
+}
+
 .btn-container {
   margin: 2rem 0;
 }
 
-.submit-btn, .add-btn {
+.github-btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+.github-btn-container a{
+  text-decoration: none;
+  max-width: 40%;
+}
+
+.github-btn-container a button img{
+  max-width: 15%;
+}
+
+.github-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.submit-btn, .add-btn, .logout-btn, .modify-btn, .delete-btn {
   background-color: #363732;
   border: none;
   border-radius: 5px;
@@ -220,20 +283,10 @@ main {
   color: #43aa8b;
 }
 
-.logout-btn {
-  background-color: #363732;
-  border: none;
-  border-radius: 5px;
-  color: #f9f9f9;
-  cursor: pointer;
-  font-size: 1rem;
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 1rem 2rem;
-  transition: all 0.3s ease;
+.logout-btn:hover, .delete-btn:hover {
+  color: #EF3054;
 }
 
-.logout-btn:hover {
-  color: #EF3054;
+.modify-btn:hover {
+  color: #6883ba;
 }

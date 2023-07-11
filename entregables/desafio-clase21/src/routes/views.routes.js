@@ -22,8 +22,15 @@ router.get("/recover", async (req, res) => {
 
 router.get("/profile", authMdw, async (req, res) => {
   const user = req.session.user;
-  // console.log(user);
   res.status(200).render("profile", {
+    style: "styles.css",
+    user,
+  });
+});
+
+router.get("/admin", authMdw, async (req, res) => {
+  const user = req.session.user;
+  res.status(200).render("admin", {
     style: "styles.css",
     user,
   });

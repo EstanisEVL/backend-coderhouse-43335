@@ -5,23 +5,23 @@ const collectionName = "Usuarios";
 const userSchema = new mongoose.Schema({
   first_name: {
     type: String,
-    required: true,
+    // required: true,
   },
   last_name: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
-    required: true,
+    // required: true,
   },
   age: {
     type: String,
-    required: true,
+    // required: true,
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
   role: {
     type: String,

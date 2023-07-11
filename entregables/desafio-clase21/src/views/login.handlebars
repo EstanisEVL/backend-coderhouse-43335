@@ -2,7 +2,7 @@
   <section class="login-section">
     <div class="container">
       <div class="title-container">
-        <h1>Inicio de sesión</h1>
+        <h1 class="title">Inicio de sesión</h1>
       </div>
 
       <div>
@@ -40,12 +40,13 @@
             <button type="submit" class="submit-btn">Ingresar</button>
           </div>
         </form>
-      </div>
-
-      <div>
-        <a href="/api/session/github">
-          <button type="submit">Ingresar con GitHub</button>
-        </a>
+        <div class="github-btn-container">
+          <a href="/api/session/github">
+            <button class="submit-btn github-btn">Ingresar con
+                <img src="/assets/github/github-mark-white.png" />
+            </button>
+          </a>
+        </div>
       </div>
 
     </div>

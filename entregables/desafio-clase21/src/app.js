@@ -9,6 +9,7 @@ import mongoStore from "connect-mongo";
 import passport from "passport";
 // Importación de utils:
 import __dirname from "./utils.js";
+import initializePassport from "./config/passport.config.js";
 // Importación de rutas:
 import viewsRouter from "./routes/views.routes.js";
 import sessionRouter from "./routes/sessions.routes.js";
@@ -36,6 +37,11 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// Passport:
+initializePassport();
+app.use(passport.initialize())
+
 
 // Handlebars:
 app.engine("handlebars", handlebars.engine());

@@ -1,5 +1,5 @@
 <main>
-  <section class="main-section">
+  <section class="admin-section">
     <div class="container">
       <div class="title-container">
         <h1>¡Bienvenid@!</h1>
@@ -36,12 +36,17 @@
         </div>
         <div class="card-container">
           {{#each products}}
-            <div class="product-card_profile">
-              <div class="product-card_content-profile">
+            <div class="product-card">
+              <div class="product-card_content">
                 <h4 class="product-card_category">{{this.category}}</h4>
-                <h3 class="product-card_title-profile">{{this.title}}</h3>
+                <h3 class="product-card_title">{{this.title}}</h3>
                 <p class="product-card_description">{{this.description}}</p>
                 <p class="product-card_price">$ {{this.price}}</p>
+              </div>
+              <div class="product-card_btns">
+                <button class="add-btn">Agregar</button>
+                <button class="modify-btn">Modificar</button>
+                <button class="delete-btn">Eliminar</button>
               </div>
             </div>
           {{/each}}
