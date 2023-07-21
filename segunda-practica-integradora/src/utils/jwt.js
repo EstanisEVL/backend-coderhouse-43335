@@ -29,7 +29,6 @@ export const passportCall = (strategy) => {
       if (err) return next(err);
       if (!user) {
         return res.status(401).send({
-          // ver si sirve String(info) sino cambiarla por info.toString()
           error: info.messages ? info.messages : String(info),
         });
       }
