@@ -1,8 +1,8 @@
 import passport from "passport";
 import jwt from "passport-jwt";
-import {roles} from "../constants/roles.js";
-// import userModel from "../dao/models/user.model.js"; 
-import { SECRET_JWT } from "../utils/jwt.js";
+import { roles } from "../constants/roles.js";
+// import userModel from "../dao/models/user.model.js";
+import { SECRET_JWT, cookieExtractor } from "../utils/jwt.js";
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -14,16 +14,16 @@ const initializePassport = () => {
     "jwt",
     new JWTStrategy(
       {
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
         secretOrKey: SECRET_JWT,
       },
-      async (jwtPayload, done) => {
-        console.log(jwtPayload);
+      async (jwt_payload, done) => {
+        console.log(jwt_payload);
         try {
-          if (roles.includes(jwtPayload.role)) {
-            return done(null, jwtPayload);
-          }
-          return done(null, jwtPayload);
+          // if (roles.includes(jwt_payload.role)) {
+          //   return done(null, jwt_payload);
+          // }
+          return done(null, jwt_payload);
         } catch (err) {
           return done(err);
         }

@@ -1,7 +1,5 @@
 import passport from "passport";
 
-// Códigos de errores: 400 - bad request; 401 - not authorized (autenticación requerida); 403 - forbidden (el usuario no tiene los permisos necesarios); 404 - not found;
-
 function handlePolicies(policies) {
   return (req, res, next) => {
     if (policies.length === 1 && policies[0] === "public") {

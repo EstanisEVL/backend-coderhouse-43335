@@ -48,3 +48,16 @@ app.listen(PORT, () => {
   displayRoutes(app);
   console.log(`Listening on PORT: ${PORT}`);
 });
+
+
+/*
+Si vas a usar jwt..Tenes que tener en cuenta esto..
+
+(Sin cookies te obliga a usar código en el frontend) porque en todas las peticiones tenes que agregar el token
+
+Si usas cookies es mas facil porque no escribis codigo en el front pero es mas vulnerable.
+
+Con cookie:
+
+Seguí la ppt de la clase 22 que es prácticamente lo que te pide.
+*/

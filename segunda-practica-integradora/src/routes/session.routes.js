@@ -3,10 +3,10 @@ import passport from "passport";
 import userModel from "../dao/models/user.model.js";
 
 import { createHashValue, isValidPwd } from "../utils/encrypt.js";
+import { generateJwt, passportCall } from "../utils/jwt.js";
 
 const router = Router();
 
-// Modificar el sistema de login del usuario para poder trabajar con jwt:
 router.post("/register", async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
@@ -24,11 +24,12 @@ router.post("/register", async (req, res) => {
     const checkUser = await userModel.findOne({ email: email });
 
     if (checkUser) {
-      return res.redirect("/login");
+      // return res.redirect("/login");
+      res.status(400).send({ message: "User already exists!" });
     } else {
       const newUser = await userModel.create(addedUser);
-      req.session.user = { ...addedUser };
-      return res.redirect("/login");
+      // return res.redirect("/login");
+      res.status(200).send({ message: "Succesful registry", newUser });
     }
   } catch (err) {
     console.log(err);
@@ -39,8 +40,6 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // CAMBIAR POR JWT:
-    const session = req.session;
     const admin = {
       first_name: "Admin CODER",
       age: "-",
@@ -52,26 +51,30 @@ router.post("/login", async (req, res) => {
     if (email !== admin.email || password !== admin.password) {
       const findUser = await userModel.findOne({ email });
       if (!findUser) {
-        return res.status(400).redirect("/register");
+        return res
+          .status(400)
+          .send({ message: "User does not exist, please register." });
       }
       const isValidComparePwd = await isValidPwd(password, findUser.password);
       if (!isValidComparePwd) {
-        return res.status(401).redirect("/login");
+        return res.status(401).send({ message: "Incorrect password." });
+        // res.redirect("/login")
       }
 
-      req.session.user = {
-        ...findUser,
+      const signUser = {
+        email,
+        role: findUser.role,
+        id: findUser._id,
       };
-      const { docs } = await productsModel.paginate({}, { lean: true });
 
-      return res.render("profile", {
-        style: "styles.css",
-        first_name: req.session?.user?.first_name || findUser.first_name,
-        email: req.session?.user?.email || email,
-        age: req.session?.user?.age || findUser.age,
-        role: req.session?.user?.role || findUser.role,
-        products: docs,
-      });
+      const token = await generateJwt({ ...signUser });
+
+      req.user = { ...signUser };
+
+      res
+        .cookie("Cookie", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
+        .send({ message: `Successful login! Welcome ${email}` });
+      // res.render("register")
     } else {
       const { docs } = await productsModel.paginate({}, { lean: true });
       res.render("admin", {
@@ -125,14 +128,9 @@ router.get(
   }
 );
 
-
-
 // Agregar al router /api/sessions/ la ruta /current, la cual utilizará el modelo de sesión que estés utilizando, para poder devolver en una respuesta el usuario actual:
-router.get("/current", async (req, res) => {
-  
-})
-
-
-
+router.get("/current", passportCall("jwt"), (req, res) => {
+  res.send(req.user);
+});
 
 export default router;

@@ -19,7 +19,6 @@ const schema = new mongoose.Schema({
   age: Number,
   password: String,
   carts: {
-    // Id con referencia a Carts:
     type: [
       {
         cart: { type: mongoose.Schema.Types.ObjectId, ref: "Carritos" },
