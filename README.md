@@ -6,14 +6,14 @@
 
 ### Índice:
 
-1. [Estructura del proyecto](#structure).
-2. [Variables de entorno](#environments).
-3. [Cómo ejecutar la aplicación](#starting).
+1. [Estructura del proyecto](#estructura-del-proyecto).
+2. [Variables de entorno](#variables-de-entorno).
+3. [Cómo ejecutar la aplicación](#cómo-ejecutar-la-aplicación).
 
 
 ---
 
-### Estructura del proyecto: {#structure}
+### Estructura del proyecto:
 
 src
 
@@ -47,7 +47,7 @@ app.js          # punto de entrada de la aplicación
 
 ---
 
-### Variables de entorno: {#environments}
+### Variables de entorno:
 
 La aplicación soporta tres entornos: **development**, **testing** y **production**. Las variables de cada entorno se encuentran en los archivos .env correspondientes y contienen:
 
@@ -63,6 +63,6 @@ SECRET_JWT
 
 ---
 
-### Cómo ejecutar la aplicación: {#starting}
+### Cómo ejecutar la aplicación:
 
 Teniendo los archivos .env correctamente configurados, podés correr la aplicación, en cualquiera de sus entornos, ejecutando el comando `npm run start:<entorno>`. Las opciones de entorno pueden ser `dev`, `test` o `prod`.
