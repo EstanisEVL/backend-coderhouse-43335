@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 
-export const createHashValue = async (val) => {
-  const salt = await bcrypt.genSalt();
-  return await bcrypt.hashSync(val, salt);
+export const createHashValue = (val) => {
+  const salt = bcrypt.genSalt();
+  return bcrypt.hashSync(val, salt);
 };
 
-export const isValidPwd = async (pwd, encryptedPwd) => {
-  const validValue = await bcrypt.compareSync(pwd, encryptedPwd);
+export const isValidPwd =  (pwd, encryptedPwd) => {
+  const validValue = bcrypt.compareSync(pwd, encryptedPwd);
   return validValue;
 };

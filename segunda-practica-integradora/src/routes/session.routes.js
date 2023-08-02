@@ -11,7 +11,11 @@ router.post("/register", async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
 
-    const pwdHashed = await createHashValue(password);
+    if (!first_name || !last_name || !email || !age || !password || password === "") {
+      return res.status(400).send({ message: "Please complete all fields." });
+    }
+
+    const pwdHashed = createHashValue(password);
 
     const addedUser = {
       first_name,
