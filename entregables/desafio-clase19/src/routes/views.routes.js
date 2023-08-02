@@ -8,11 +8,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/login", async (req, res) => {
-  res.render("login", {style: "styles.css"});
+  res.render("login", { style: "styles.css" });
 });
 
 router.get("/register", async (req, res) => {
-  res.render("register", {style: "styles.css"});
+  res.render("register", { style: "styles.css" });
 });
 
 router.get("/profile", authMdw, async (req, res) => {
