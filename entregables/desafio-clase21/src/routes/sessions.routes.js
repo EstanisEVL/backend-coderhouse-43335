@@ -23,7 +23,6 @@ router.post("/register", async (req, res) => {
     const checkUser = await userModel.findOne({ email: email });
 
     if (checkUser) {
-      alert("Usuario existente");
       return res.redirect("/login");
     } else {
       const newUser = await userModel.create(addedUser);
