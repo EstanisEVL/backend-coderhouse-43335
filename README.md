@@ -16,18 +16,23 @@
 ### Estructura del proyecto: {#structure}
 
 src
+
 └─── config         # carga de variables de entorno para desarrollo, testing y producción.
 
 └─── controllers    # controladores que se comunican con los servicios, con validaciones y middlewares.
 
 └─── dao 
+
 ├───└─── managers   # managers
+
 └───└─── models     # modelos de la base de datos (MongoDb)
 
 └─── middlewares     # operaciones que controlan o manipulan las peticiones a procesar por el controlador
 
 └─── public
+
 ├───└─── assets    # iconos e imágenes
+
 └───└─── css       # estilos CSS
 
 └─── routes          # rutas de Express.js que definen la estructura de la API
