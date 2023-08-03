@@ -5,5 +5,4 @@ const authMdw = (req, res, next) => {
   return res.redirect("login");
 }
 
-
 export default authMdw;

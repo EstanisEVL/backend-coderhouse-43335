@@ -1,6 +1,5 @@
-import passport from "passport";
 import { createHashValue, isValidPwd } from "../utils/encrypt.js";
-import { generateJwt, passportCall } from "../utils/jwt.js";
+import { generateJwt } from "../utils/jwt.js";
 import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../config/config.js";
 import SessionService from "../services/session.services.js";
 
@@ -12,7 +11,6 @@ class SessionController {
   }
 
   // Métodos:
-  // Pasar validaciones a middlewares:
   registerUser = async (req, res) => {
     try {
       const { first_name, last_name, email, age, password } = req.body;
@@ -44,14 +42,16 @@ class SessionController {
 
       if (checkUser) {
         // return res.redirect("/login");
-        return res.status(400)
-        // .redirect("/login");
-        .send({ message: "User already exists!" });
+        return (
+          res
+            .status(400)
+            // .redirect("/login");
+            .send({ message: "User already exists!" })
+        );
       } else {
         const newUser = await this.sessionService.createUser(userInfo);
 
-        // return res.redirect("/login");
-        // res.status(200).redirect("/login");
+        // return res.status(200).redirect("/login");
         return res.send({ message: "Succesful registry", newUser });
       }
     } catch (err) {
@@ -127,43 +127,36 @@ class SessionController {
     });
   };
 
+  getCurrentUser = (req, res) => {
+    res.send({ message: "Current user:", user });
+  };
+
   // Github:
-  // Revisar middlewares, pasarlos a su carpeta e importarlos:
-  githubLogin =
-    // passport.authenticate("github", { scope: ["user: email"] }),
-    async (req, res) => {};
+  githubLogin = async (req, res) => {};
 
-  getGithubUser =
-    // passport.authenticate("github", { failureRedirect: "/login" }),
-    async (req, res) => {
-      try {
-        req.session.user = req.user;
-        // console.log(req.session.user);
-        const user = req.user;
+  getGithubUser = async (req, res) => {
+    try {
+      req.session.user = req.user;
+      // console.log(req.session.user);
+      const user = req.user;
 
-        const { docs } = await this.sessionService.getProducts();
-        // const { docs } = await productsModel.paginate({}, { lean: true });
+      const { docs } = await this.sessionService.getProducts();
+      // const { docs } = await productsModel.paginate({}, { lean: true });
 
-        // res.render("profile", {
-        //   style: "styles.css",
-        //   first_name: req.session?.user?.first_name,
-        //   last_name: req.session?.user?.last_name,
-        //   email: req.session?.user?.email,
-        //   age: req.session?.user?.age,
-        //   role: req.session?.user?.role,
-        //   products: docs,
-        // });
-        res.send({ message: "Welcome github user", user });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-  getCurrentUser =
-    // passportCall("jwt")
-    (req, res) => {
-      res.send({ message: "Current user:", user });
-    };
+      // res.render("profile", {
+      //   style: "styles.css",
+      //   first_name: req.session?.user?.first_name,
+      //   last_name: req.session?.user?.last_name,
+      //   email: req.session?.user?.email,
+      //   age: req.session?.user?.age,
+      //   role: req.session?.user?.role,
+      //   products: docs,
+      // });
+      res.send({ message: "Welcome github user", user });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 }
 
 export default SessionController;

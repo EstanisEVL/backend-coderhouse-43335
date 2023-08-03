@@ -6,6 +6,7 @@ const router = Router();
 
 const viewsController = new ViewsController();
 
+// Rutas:
 router.get("/", viewsController.home);
 
 router.get("/login", viewsController.login);
@@ -17,5 +18,6 @@ router.get("/recover", viewsController.recover);
 router.get("/profile", authMdw, viewsController.profile);
 
 router.get("/admin", authMdw, viewsController.admin);
+
 
 export default router;

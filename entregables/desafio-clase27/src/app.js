@@ -33,7 +33,3 @@ app.listen(PORT, () => {
   displayRoutes(app);
   console.log(`Listening on PORT: ${PORT}`);
 });
-
-/*
-✓	Es obligatorio pasar adjunto el archivo .env fuera del repositorio
-*/
