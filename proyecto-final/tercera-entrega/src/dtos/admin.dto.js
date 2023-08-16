@@ -1,6 +1,7 @@
 export default class AdminDTO {
-  constructor(first_name, role) {
-    this.first_name = first_name;
+  constructor(first_name, email, role) {
+    this.fullName = first_name;
+    this.email = email;
     this.role = role.toUpperCase();
   }
 }

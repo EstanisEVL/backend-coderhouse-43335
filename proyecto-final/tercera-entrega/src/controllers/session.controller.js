@@ -218,19 +218,15 @@ export const userLogin = async (req, res) => {
           });
       }
     } else {
-      const adminDTO = new AdminDTO(admin.first_name, admin.role);
+      const adminDTO = new AdminDTO(admin.first_name, admin.email, admin.role);
       const token = await generateJwt({ ...adminDTO });
-      // COMPLETAR getProducts:
-      // const { docs } = await SessionService.getProducts();
 
-      // res.render("admin", {
-      //   style: "styles.css",
-      //   first_name: admin.first_name,
-      //   age: admin.age,
-      //   email: req.session?.user?.email || email,
-      //   role: admin.role,
-      //   products: docs,
-      // });
+      const docs = await ProductService.getProducts();
+        const productsRender = docs.map(
+          (product) => new ProductDTO(product)
+        );
+
+      console.log(docs);
       res
         .status(200)
         .cookie("Cookie", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
@@ -240,7 +236,7 @@ export const userLogin = async (req, res) => {
           age: adminDTO.age,
           email: adminDTO.email,
           role: adminDTO.role,
-          // products: docs,
+          products: productsRender,
         });
     }
   } catch (err) {
