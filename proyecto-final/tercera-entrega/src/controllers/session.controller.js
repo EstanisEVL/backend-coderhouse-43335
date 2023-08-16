@@ -77,10 +77,7 @@ export const registerUser = async (req, res) => {
       };
       const newUser = await SessionService.createUser(userInfo);
       const userDTO = new UserDTO(newUser);
-      return res.status(201).json({
-        message: "You've succesfully completed the registration process!",
-        userDTO,
-      });
+      return res.status(201).redirect("/login");
     }
   } catch (err) {
     console.error(err);
