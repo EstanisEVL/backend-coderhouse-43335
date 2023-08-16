@@ -115,7 +115,6 @@ export const updateCartById = async (req, res) => {
   }
 };
 
-// CONSULTAR PORQUE NO PUEDO IMPLEMENTARLA CORRECTAMENTE
 export const updateProductFromCart = async (req, res) => {
   try {
     const { cid, pid } = req.params;
@@ -277,8 +276,6 @@ export const purchaseProducts = async (req, res) => {
         });
 
         const newTicket = await TicketService.createTicket(ticketData);
-
-        // Limpiar carrito después de la compra.
 
         for (const product of productsToUpdate) {
           const pid = product.pid;

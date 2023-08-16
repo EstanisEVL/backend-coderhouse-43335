@@ -1,11 +1,9 @@
 export default class Products {
   constructor() {
-    this.data = []
+    this.data = [];
   }
 
   get = () => {
     return this.data;
-  }
-
-  // COMPLETAR MÉTODOS
+  };
 }

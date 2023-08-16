@@ -27,7 +27,6 @@ switch (PERSISTENCE) {
     Tickets = TicketServiceDao;
     break;
 
-  // IMPLEMENTAR DAO EN FILE SYSTEM:
   case "FS":
     const { default: CartServiceFs } = await import(
       "./memory/cart.fs.js"

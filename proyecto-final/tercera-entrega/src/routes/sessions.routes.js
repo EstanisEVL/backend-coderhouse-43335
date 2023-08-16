@@ -8,8 +8,6 @@ import {
   userLogout,
 } from "../controllers/session.controller.js";
 import { passportCall } from "../utils/jwt.js";
-import { authorize } from "../middlewares/auth-jwt.middleware.js";
-import { handlePolicies } from "../middlewares/policies.middleware.js";
 
 const router = Router();
 

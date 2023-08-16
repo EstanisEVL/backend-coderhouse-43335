@@ -3,7 +3,6 @@ import validationUtils from "../utils/validate.js";
 
 export const getProducts = async (req, res) => {
   try {
-    // AGREGAR PAGINACIÓN DE MONGOOSE
     const products = await ProductService.getProducts();
     return res.status(200).json({ message: "Products: ", products });
   } catch (err) {

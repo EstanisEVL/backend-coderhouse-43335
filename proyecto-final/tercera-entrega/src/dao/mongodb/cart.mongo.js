@@ -22,7 +22,6 @@ export default class Carts {
     }
   };
 
-  // CONSULTAR PORQUE NO PUEDO IMPLEMENTARLA CORRECTAMENTE
   getByIdAndUpdate = async (cid, pid, updatedProductBody) => {
     try {
       const updatedCart = await cartModel.findOneAndUpdate(

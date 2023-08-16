@@ -21,7 +21,6 @@ export const register = async (req, res) => {
   }
 };
 
-// AGREGAR VISTA PARA RECOVER EN HANDLEBARS
 export const recover = async (req, res) => {
   try {
     res.render("recover", { style: "styles.css" });

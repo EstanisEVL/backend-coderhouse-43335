@@ -39,9 +39,10 @@ const initializePassport = () => {
         callbackURL: "http://localhost:8080/api/session/github/callback",
       },
       async (accesToken, refreshToken, profile, done) => {
-        // console.log(profile);
         try {
-          let user = await SessionService.findOne({ email: profile._json?.email });
+          let user = await SessionService.findOne({
+            email: profile._json?.email,
+          });
 
           if (!user) {
             let addNewUser = {

@@ -13,27 +13,21 @@ import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../config/config.js";
 import ProductDTO from "../dtos/product.dto.js";
 import CartDTO from "../dtos/cart.dto.js";
 
-// REVISAR MÉTODOS Y PROBAR:
-// AGREGAR VALIDACIONES
-
 export const registerUser = async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
 
-    // Verifica que el body tenga todos los campos completados:
     if (!validationUtils.validateRegisterBody(req.body)) {
       return res
         .status(400)
         .json({ message: "Please fill all required fields." });
     }
 
-    // Revisa si ya existe el usuario registrado:
     const checkUser = await SessionService.findUser(email);
 
     if (checkUser) {
       return res.status(400).json({ message: "User already exists!" });
     } else {
-      // Revisa que el nombre y apellido sólo contengan letras:
       if (!validationUtils.validateInput(first_name)) {
         return res.status(400).json({
           message: `${first_name} is not a valid name, it must contain only letters.`,
@@ -45,14 +39,12 @@ export const registerUser = async (req, res) => {
         });
       }
 
-      // Controla que la dirección de correo electrónico tenga un formato válido:
       if (!validationUtils.validateEmail(email)) {
         return res
           .status(400)
           .json({ message: "Please enter a valid email address." });
       }
 
-      // Limita la cantidad de caracteres en los campos first_name y last_name, a un máximo de 20 caracteres:
       if (validationUtils.limitInputLength(first_name)) {
         return res.status(400).json({
           message: "Invalid first name. Máx. characters allowed: 20.",
@@ -64,22 +56,18 @@ export const registerUser = async (req, res) => {
           .json({ message: "Invalid last name. Máx. characters allowed: 20." });
       }
 
-      // Verifica que el usuario ingrese una edad válida:
       if (validationUtils.validateAge(age)) {
         return res.status(400).json({ message: "Please enter a valid age." });
       }
 
-      // Controla la validez de la contraseña ingresada:
       if (validationUtils.validatePassword(password)) {
         return res
           .status(400)
           .json({ message: validationUtils.validatePassword(password) });
       }
 
-      // Encripta contraseña:
       const pwdHashed = createHashValue(password);
 
-      // Registra un nuevo usuario:
       const userInfo = {
         first_name,
         last_name,
@@ -95,7 +83,6 @@ export const registerUser = async (req, res) => {
       });
     }
   } catch (err) {
-    // Error:
     console.error(err);
     res.status(500).json({ message: "There was an error registering user." });
   }
@@ -225,7 +212,10 @@ export const userLogin = async (req, res) => {
             role: user.role,
             cid: String(cart._id),
             carts: user.userCarts,
-            productsTitle: productsInCart.length === 0 || !user.userCarts ? "El carrito está vacío" : "Productos en el carrito:",
+            productsTitle:
+              productsInCart.length === 0 || !user.userCarts
+                ? "El carrito está vacío"
+                : "Productos en el carrito:",
             productsInCart: productsInCart,
             products: productsRender,
           });

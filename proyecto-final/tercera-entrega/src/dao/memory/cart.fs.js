@@ -1,11 +1,9 @@
 export default class Carts {
   constructor() {
-    this.data = []
+    this.data = [];
   }
 
   get = () => {
     return this.data;
-  }
-
-  // COMPLETAR MÉTODOS
+  };
 }

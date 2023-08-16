@@ -34,8 +34,6 @@ router.put(
   updateCartById
 );
 
-// CONSULTAR PORQUE NO PUEDO IMPLEMENTARLA CORRECTAMENTE
-// Actualiza la cantidad de un producto específico en el carrito.
 router.put(
   "/:cid/products/:pid",
   [isValidMongoId("cid"), isValidMongoId("pid")],
