@@ -6,7 +6,7 @@ import {
   TicketService,
 } from "../repositories/index.js";
 import validationUtils from "../utils/validate.js";
-import { sendMail } from "./email.controller.js";
+import { sendMail } from "../helpers/email.helper.js";
 
 export const getCarts = async (req, res) => {
   try {

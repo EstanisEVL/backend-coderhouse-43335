@@ -12,7 +12,6 @@ import initializePassport from "./config/passport.config.js";
 import cartRoutes from "./routes/carts.routes.js";
 import productRoutes from "./routes/products.routes.js";
 import sessionRoutes from "./routes/sessions.routes.js";
-import emailRoutes from "./routes/email.routes.js";
 import viewsRoutes from "./routes/views.routes.js";
 
 const app = express();
@@ -44,7 +43,6 @@ app.use("/", viewsRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/sessions", sessionRoutes);
-app.use("/api/email", emailRoutes);
 
 // Levantando el servidor:
 app.listen(PORT_APP, () => {
