@@ -49,3 +49,15 @@ app.listen(PORT_APP, () => {
   displayRoutes(app);
   console.log(`Listening on ${PORT_APP}`);
 });
+
+/*
+- Hay detalles que todavía no funcionan: (Son muy de lógica de negocios) lo mas importantes son los de arriba..
+
+    login github
+    /profile o /current
+    Después de finalizar la compra los productos siguen ahí. 
+
+Todavía  tenemos tiempo hasta el final, como recomendación, para la prox entrega de practica integradora, (si tenes tiempo y ganas) entrega un repo nuevo pero no copies y pegues... 
+
+Anda agregando solo que necesitas.. de esa manera vas a practicar y mejorar muchísimo mas rápido. Vas a tener un codigo mas limpio.
+*/

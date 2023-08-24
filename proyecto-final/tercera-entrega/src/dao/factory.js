@@ -29,16 +29,16 @@ switch (PERSISTENCE) {
 
   case "FS":
     const { default: CartServiceFs } = await import(
-      "./memory/cart.fs.js"
+      "./fs/cart.fs.js"
     );
     const { default: ProductServiceFs } = await import(
-      "./memory/product.fs.js"
+      "./fs/product.fs.js"
     );
     const { default: SessionServiceFs } = await import(
-      "./memory/user.fs.js"
+      "./fs/user.fs.js"
     );
     const { default: TicketServiceFs } = await import(
-      "./memory/user.fs.js"
+      "./fs/user.fs.js"
     );
     Carts = CartServiceFs;
     Products = ProductServiceFs;
