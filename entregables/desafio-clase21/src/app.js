@@ -40,8 +40,7 @@ app.use(
 
 // Passport:
 initializePassport();
-app.use(passport.initialize())
-
+app.use(passport.initialize());
 
 // Handlebars:
 app.engine("handlebars", handlebars.engine());

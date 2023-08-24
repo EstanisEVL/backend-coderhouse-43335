@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
 import Connection from "./utils/connection.js";
 import __dirname from "./utils.js";
-import {PORT} from "./config/config.js";
+import { PORT } from "./config/config.js";
 // Importación de rutas:
 import sessionRouter from "./routes/session.routes.js";
 import viewsRouter from "./routes/views.routes.js";
@@ -14,7 +14,7 @@ const app = express();
 // Middlewares:
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 
 // Handlebars:
