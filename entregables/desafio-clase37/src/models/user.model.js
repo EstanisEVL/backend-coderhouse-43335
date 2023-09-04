@@ -6,6 +6,7 @@ export const collection = "Users";
 
 const roleType = {
   admin: "admin",
+  premium: "premium",
   user: "user",
 };
 

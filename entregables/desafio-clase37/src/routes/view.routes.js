@@ -8,6 +8,7 @@ import {
   profile,
   admin,
 } from "../controllers/view.controller.js";
+import verifyToken from "../middlewares/verify-token.middleware.js";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get("/register", register);
 
 router.get("/recover", recover);
 
-router.get("/reset", reset);
+router.get("/reset/:token", verifyToken, reset);
 
 router.get("/profile", profile);
 

@@ -14,6 +14,11 @@ export const generateJwt = (user) => {
   });
 };
 
+export const generateMailToken = (user) => {
+  const token = jwt.sign({user}, SECRET_JWT, {expiresIn: "1h"});
+  return token;
+}
+
 export const cookieExtractor = (req) => {
   let token = null;
   if (req && req.cookies) {

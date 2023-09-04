@@ -2,7 +2,7 @@ export const home = async (req, res) => {
   try {
     res.redirect("/login");
   } catch (err) {
-    console.log(err);
+    req.logger.error(err);
   }
 };
 
@@ -10,7 +10,7 @@ export const login = async (req, res) => {
   try {
     res.render("login", { style: "styles.css" });
   } catch (err) {
-    console.log(err);
+    req.logger.error(err);
   }
 };
 
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
   try {
     res.render("register", { style: "styles.css" });
   } catch (err) {
-    console.log(err);
+    req.logger.error(err);
   }
 };
 
@@ -26,7 +26,7 @@ export const recover = async (req, res) => {
   try {
     res.render("recover", { style: "styles.css" });
   } catch (err) {
-    console.log(err);
+    req.logger.error(err);
   }
 };
 

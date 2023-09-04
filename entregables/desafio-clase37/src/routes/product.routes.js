@@ -6,7 +6,7 @@ import {
   updateProductById,
   deleteProductById,
 } from "../controllers/product.controller.js";
-import isValidMongoId from "../middlewares/validate-mongoId.js";
+import isValidMongoId from "../middlewares/validate-mongoId.middleware.js";
 import { handlePolicies } from "../middlewares/policies.middleware.js";
 import { ROLES } from "../constants/roles.js";
 
@@ -16,7 +16,7 @@ router.get("/", getProducts);
 
 router.get("/:pid", [isValidMongoId("pid")], getProductById);
 
-router.post("/", [handlePolicies(ROLES[0])], createProduct);
+router.post("/", [handlePolicies(ROLES[0, 1])], createProduct);
 
 router.put(
   "/:pid",
@@ -26,7 +26,7 @@ router.put(
 
 router.delete(
   "/:pid",
-  [isValidMongoId("pid"), handlePolicies(ROLES[0])],
+  [isValidMongoId("pid"), handlePolicies(ROLES[0, 1])],
   deleteProductById
 );
 

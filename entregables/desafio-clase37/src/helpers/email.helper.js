@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { EMAIL, EMAIL_PASSWORD } from "../config/config.js";
+import { generateMailToken } from "../utils/jwt.js";
 
 export const sendMail = async (email, amount, date) => {
   const transporter = nodemailer.createTransport({
@@ -32,7 +33,7 @@ export const sendMail = async (email, amount, date) => {
   }
 };
 
-export const sendRecoveryMail = async (email, link) => {
+export const sendRecoveryMail = async (user) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     user: "smtp.gmail.com",
@@ -44,15 +45,18 @@ export const sendRecoveryMail = async (email, link) => {
     },
   });
   try {
+    const token = generateMailToken(user.email);
+    const link = `http://localhost:8080/reset/${token}`;
     let result = await transporter.sendMail({
       from: EMAIL,
-      to: email,
+      to: user.email,
       subject: "Re-establecer contraseña",
       html: `
         <div>
-          <h1>¡Hola, ${email}!</h1>
+          <h1>¡Hola, ${user.email}!</h1>
           <h2>Para reestablecer tu contraseña haz click en el siguiente botón:</h2>
           <a href=${link}>REESTABLECER CONTRASEÑA</a>
+          <p>Recuerda que el link para reestablecer tu contraseña expira en 1 hora.</p>
         </div>
       `,
     });

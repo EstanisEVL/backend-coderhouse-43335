@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
   quantity: {
     type: Number,
   },
+  owner: {
+    type: String,
+    default: "admin",
+  },
 });
 
 schema.plugin(mongoosePaginate);

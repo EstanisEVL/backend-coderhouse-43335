@@ -35,17 +35,14 @@ const initializePassport = () => {
     new GitHubStrategy(
       {
         clientID: GITHUB_CLIENT_ID,
-        clientSecert: GITHUB_CLIENT_SECRET,
+        clientSecret: GITHUB_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
-        scope: ["user:email"]
+        scope: ["user:email"],
       },
       async (accesToken, refreshToken, profile, done) => {
-        console.log(profile);
         try {
-          let user = await SessionService.findOne({
-            email: profile._json?.email,
-          });
-
+          const user = await SessionService.findUser(profile._json.email);
+          
           if (!user) {
             let addNewUser = {
               first_name: profile._json.name,
@@ -54,7 +51,7 @@ const initializePassport = () => {
               age: 0,
               password: "",
             };
-
+            
             let newUser = await userModel.create(addNewUser);
             done(null, newUser);
           } else {

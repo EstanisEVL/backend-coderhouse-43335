@@ -86,11 +86,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-/* - Realizar un sistema de recuperación de contraseña, la cual envíe por medio de un correo un botón que redireccione a una página para restablecer la contraseña (no recuperarla):
-  El link del correo debe expirar después de 1 hora de enviado;
-  Si se trata de restablecer la contraseña con la misma contraseña del usuario, debe impedirlo e indicarle que no se puede colocar la misma contraseña;
-  Si el link expiró, debe redirigir a una vista que le permita generar nuevamente el correo de restablecimiento, el cual contará con una nueva duración de 1 hora.
-*/
 export const recoverUser = async (req, res) => {
   try {
     const { email } = req.body;
@@ -102,7 +97,7 @@ export const recoverUser = async (req, res) => {
         message: "User does not exist, please create an account.",
       });
     } else {
-      sendRecoveryMail(email, "http://localhost:8080/reset");
+      sendRecoveryMail(findUser);
       return res.status(200).json({
         message: `Email succesfully sent to: ${email}! Please check your inbox to continue the password recovery process.`,
       });
@@ -119,7 +114,6 @@ export const resetPassword = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // VALIDAR: que ingrese todos los datos, que el usuario exista, que la nueva contraseña no sea idéntica a la existente, que la nueva tenga el formato indicado (mayuscula, minúscula, caracter especial, número).
     if (!validationUtils.validateLoginBody(req.body)) {
       return res
         .status(400)
@@ -151,9 +145,7 @@ export const resetPassword = async (req, res) => {
     const isValidComparePwd = isValidPwd(password, findUser.password);
 
     if (!isValidComparePwd) {
-      // Actualiza el campo password del usuario y lo guarda en la base de datos.
       const updatedUser = await SessionService.updateUser(email, pwdHashed);
-      console.log("Password succesfully resetted: ", updatedUser);
       return res.status(200).redirect("/login");
     } else {
       return res
@@ -171,7 +163,6 @@ export const resetPassword = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const admin = {
       first_name: "Admin CODER",
       age: "-",
@@ -277,7 +268,11 @@ export const userLogin = async (req, res) => {
         }
 
         const docs = await ProductService.getProducts();
-        const productsRender = docs.map(
+        // Un usuario premium NO pueda agregar a su carrito un producto que le pertenece:
+        const filteredDocs = docs.filter(
+          (product) => product.owner !== user.id
+        );
+        const productsRender = filteredDocs.map(
           (product) => new ProductDTO(product, user.userCarts._id.toHexString())
         );
 
@@ -355,28 +350,8 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
-// GITHUB, revisar al implementar las vistas:
 export const githubLogin = async (req, res) => {
   try {
-    console.log(req.user);
-    // return res
-    //   .status(200)
-    //   .cookie("Cookie", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
-    //   .render("profile", {
-    //     style: "styles.css",
-    //     first_name: user.fullName,
-    //     age: user.age,
-    //     email: user.email,
-    //     role: user.role,
-    //     cid: String(cart._id),
-    //     carts: user.userCarts,
-    //     productsTitle:
-    //       productsInCart.length === 0 || !user.userCarts
-    //         ? "El carrito está vacío"
-    //         : "Productos en el carrito:",
-    //     productsInCart: productsInCart,
-    //     products: productsRender,
-    //   });
   } catch (err) {
     req.logger.error(err);
     return res
@@ -387,14 +362,44 @@ export const githubLogin = async (req, res) => {
 
 export const getGithubUser = async (req, res) => {
   try {
-    req.session.user = req.user;
-    console.log(req.session.user);
+    const githubUser = req.user;
+    const userCart = githubUser.carts.map((cart) => {
+      return String(cart._id);
+    });
+
+    const cart = await CartService.getCartById(String(userCart[0]));
+
+    const signUser = {
+      first_name: githubUser.first_name,
+      last_name: githubUser.last_name,
+      email: githubUser.email,
+      age: githubUser.age,
+      role: githubUser.role,
+      id: String(githubUser._id),
+      carts: cart,
+    };
+
+    const token = await generateJwt({ ...signUser });
+    req.user = { ...signUser };
+    const user = new UserDTO(req.user);
+    let productsInCart = [];
+
+    if (user.userCarts.products.length > 0) {
+      const updatedProductsInCart = user.userCarts.products.map(
+        (product) =>
+          new ProductDTO(product.product, user.userCarts._id.toHexString())
+      );
+
+      productsInCart = updatedProductsInCart;
+    }
+
     const docs = await ProductService.getProducts();
-    const productsRender = docs.map(
+    const filteredDocs = docs.filter((product) => product.owner !== user.id);
+    const productsRender = filteredDocs.map(
       (product) => new ProductDTO(product, user.userCarts._id.toHexString())
     );
 
-    res
+    return res
       .status(200)
       .cookie("Cookie", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
       .render("profile", {
@@ -412,18 +417,6 @@ export const getGithubUser = async (req, res) => {
         productsInCart: productsInCart,
         products: productsRender,
       });
-
-    // const { docs } = await productsModel.paginate({}, { lean: true });
-    // res.render("profile", {
-    //   style: "styles.css",
-    //   first_name: req.session?.user?.first_name,
-    //   last_name: req.session?.user?.last_name,
-    //   email: req.session?.user?.email,
-    //   age: req.session?.user?.age,
-    //   role: req.session?.user?.role,
-    //   products: docs,
-    // });
-    return res.status(200).json({ message: "GitHub user: " });
   } catch (err) {
     req.logger.error(err);
     return res

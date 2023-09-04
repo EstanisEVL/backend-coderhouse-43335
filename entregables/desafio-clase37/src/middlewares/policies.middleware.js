@@ -16,6 +16,7 @@ export const handlePolicies = (policies) => {
       }
 
       if (policies.includes(userJWT.user.role.toUpperCase())) {
+        
         req.user = userJWT;
         return next();
       } else {

@@ -10,6 +10,15 @@ export default class Users {
     }
   };
 
+  getUserById = async (uid) => {
+    try {
+      const user = await userModel.findOne({ _id: uid });
+      return user;
+    } catch (err) {
+      return err;
+    }
+  };
+
   getUserByEmail = async (email) => {
     try {
       const user = await userModel.findOne({ email: email });

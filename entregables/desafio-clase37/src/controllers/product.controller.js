@@ -1,4 +1,4 @@
-import { ProductService } from "../repositories/index.js";
+import { ProductService, SessionService } from "../repositories/index.js";
 import validationUtils from "../utils/validate.js";
 
 export const getProducts = async (req, res) => {
@@ -44,12 +44,22 @@ export const createProduct = async (req, res) => {
         return res.status(400).json({ message: "Invalid price range." });
       }
 
+      const findUser = await SessionService.findUserById(req.user.user.id);
+
       const checkProduct = await ProductService.getProductByCode(product.code);
       if (!checkProduct) {
-        const productBody = await ProductService.createProduct(product);
-        return res
-          .status(200)
-          .json({ message: "Product created: ", productBody });
+        if (findUser.role !== "admin") {
+          const newProduct = { ...product, owner: req.user.user.id };
+          const productBody = await ProductService.createProduct(newProduct);
+          return res
+            .status(200)
+            .json({ message: "Product created: ", productBody });
+        } else {
+          const productBody = await ProductService.createProduct(product);
+          return res
+            .status(200)
+            .json({ message: "Product created: ", productBody });
+        }
       } else {
         return res.status(400).json({
           message:
@@ -104,10 +114,29 @@ export const deleteProductById = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Error: Product not found." });
     } else {
+      const findUser = await SessionService.findUserById(req.user.user.id);
+      // Un usuario premium sólo pueda borrar los productos que le pertenecen:
+      if (findUser.role === "premium") {
+        if (product.owner !== String(findUser._id)) {
+          return res
+            .status(400)
+            .json({
+              message:
+                "Premium users cannot delete products created by the admin.",
+            });
+        } else {
+          const deletedProduct = await ProductService.deleteProductById(pid);
+          return res.status(200).json({
+            message: "Product deleted",
+            deletedProduct
+          });
+        }
+      }
       const deletedProduct = await ProductService.deleteProductById(pid);
-      return res
-        .status(200)
-        .json({ message: "Product deleted", deletedProduct });
+      return res.status(200).json({
+        message: "Product deleted",
+        deletedProduct
+      });
     }
   } catch (err) {
     req.logger.error(err);

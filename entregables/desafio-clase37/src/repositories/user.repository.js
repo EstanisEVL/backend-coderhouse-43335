@@ -12,6 +12,15 @@ export default class SessionRepository {
     }
   };
 
+  findUserById = async (uid) => {
+    try {
+      const data = await this.dao.getUserById(uid);
+      return data;
+    } catch (err) {
+      return err;
+    }
+  };
+
   createUser = async (userInfo) => {
     try {
       const data = await this.dao.create(userInfo);
@@ -28,5 +37,5 @@ export default class SessionRepository {
     } catch (err) {
       return err;
     }
-  }
+  };
 }
