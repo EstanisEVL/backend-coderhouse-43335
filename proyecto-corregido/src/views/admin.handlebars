@@ -24,7 +24,6 @@
             <p>{{this.role}}</p>
           </div>
           <form action="/api/sessions/logout" method="get" class="form form-2">
-
             <button type="submit" class="logout-btn">Cerrar sesión</button>
           </form>
         </div>
@@ -44,14 +43,131 @@
                 <p class="product-card_price">$ {{this.price}}</p>
               </div>
               <div class="product-card_btns">
-                <button class="add-btn">Agregar</button>
-                <button class="modify-btn">Modificar</button>
-                <button class="delete-btn">Eliminar</button>
+                <button
+                  class="modify-btn"
+                  data-product-id="{{this.id}}"
+                >Modificar</button>
+                <button
+                  class="delete-product-btn"
+                  data-product-id="{{this.id}}"
+                >Eliminar</button>
               </div>
             </div>
           {{/each}}
         </div>
       </div>
+
+      {{! FORMULARIO PARA AGREGAR UN PRODUCTO: }}
+      {{!-- ENVIAR A OTRA SECCION --}}
+      <div class="container container-light">
+        <div class="title-container">
+          <h2 class="title title-dark">Agregar un producto:</h2>
+        </div>
+        <form class="form" action="/api/products" method="post">
+          <div class="form-field">
+            <label
+              for="title"
+              class="form-field_label form-field_label-dark"
+            >Nombre del producto:</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Ingresa un título para el producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="description"
+              class="form-field_label form-field_label-dark"
+            >Descripción del producto:</label>
+            <input
+              type="text"
+              name="description"
+              id="description"
+              placeholder="Ingresa una descripción para el producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="code"
+              class="form-field_label form-field_label-dark"
+            >Código del producto:</label>
+            <input
+              type="number"
+              name="code"
+              id="code"
+              placeholder="Ingresa un código para el producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="price"
+              class="form-field_label form-field_label-dark"
+            >Precio:</label>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              placeholder="Ingresa un precio para el producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="status"
+              class="form-field_label form-field_label-dark"
+            >Disponibilidad del producto:</label>
+            <input
+              type="text"
+              name="status"
+              id="status"
+              placeholder="Ingresa la disponibilidad del producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="stock"
+              class="form-field_label form-field_label-dark"
+            >Stock del producto:</label>
+            <input
+              type="number"
+              name="stock"
+              id="stock"
+              placeholder="Ingresa el stock del producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label
+              for="category"
+              class="form-field_label form-field_label-dark"
+            >Categoría del producto:</label>
+            <input
+              type="text"
+              name="category"
+              id="category"
+              placeholder="Ingresa la categoría del producto"
+              class="form-field_input form-field_input-dark"
+              required
+            />
+          </div>
+          <div class="btn-container">
+            <button type="submit" class="create-btn">Agregar</button>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 </main>
+<script src="/js/index.js"></script>

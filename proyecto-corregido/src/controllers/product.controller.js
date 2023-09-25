@@ -1,11 +1,12 @@
 import { ProductService, SessionService } from "../repositories/index.js";
+import validationUtils from "../utils/validate.js";
 
 export const getProducts = async (req, res) => {
   try {
     const products = await ProductService.getAllProducts();
-    return res.status(200).json({ message: "Carts: ", products });
+    return res.status(200).json({ message: "Products: ", products });
   } catch (err) {
-    req.logger.error(`Error in product.controller.js - line 4 - ${err}`);
+    req.logger.error(`Error in product.controller.js - line 8 - ${err}`);
     return res
       .status(500)
       .json({ message: "There was an error getting all products." });
@@ -15,60 +16,66 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const { pid } = req.params;
-    // PROBAR SI EL REPOSITORY RECIBE CORRECTAMENTE LOS PARÁMETROS:
-    const product = await ProductService.getProduct({ pid: pid });
+    const product = await ProductService.getProduct(null, pid);
     if (!product) {
-      return res.status(404).json({ message: "Error: Product not found." });
+      return res.status(404).json({ message: "Error - Product not found." });
     } else {
       return res.status(200).json({ message: "Product found: ", product });
     }
   } catch (err) {
-    req.logger.error(`Error in product.controller.js - line 26 - ${err}`);
+    req.logger.error(`Error in product.controller.js - line 25 - ${err}`);
     return res
       .status(500)
-      .json({ message: "There was an error getting all products." });
+      .json({ message: "There was an error getting a product." });
   }
 };
 
+// QUE EL CÓDIGO SE AUTOGENERE COMO CON LOS TICKETS
+// QUE NO ABANDONE LA PÁGINA DEL ADMIN CUANDO CREA EXITOSAMENTE EL PRODUCTO
 export const createProduct = async (req, res) => {
   try {
     const product = req.body;
     if (!validationUtils.validateProduct(product)) {
       return res.status(400).json({
         message:
-          "Please fill all required product fields: title, description, code, price, status, stock and category.",
+          "Error - Please fill all required product fields (title, description, code, price, status, stock and category).",
       });
     } else {
       if (!validationUtils.validatePrice(product.price)) {
-        return res.status(400).json({ message: "Invalid price range." });
+        return res
+          .status(400)
+          .json({ message: "Error - Invalid price range." });
       }
+      const checkProduct = await ProductService.getProduct(product.code, null);
+      if (!checkProduct) {
+        if (req.user.user.role.toLowerCase() !== "admin") {
+          const findUser = await SessionService.findUser(
+            null,
+            req.user.user.id
+          );
 
-      // Revisar nombre del método del repositorio:
-      const fUser = await SessionService.findUserById(req.user.user.id);
+          console.log(findUser);
 
-      const cProduct = await ProductService.getProduct({ code: product.code });
-      if (!cProduct) {
-        if (fUser.role !== "admin") {
-          const pBody = { ...product, owner: req.user.user.id };
-          const nProduct = await ProductService.createProduct(pBody);
+          const newProduct = { ...product, owner: req.user.user.id };
+          const productBody = await ProductService.createProduct(newProduct);
           return res
-            .status(200)
-            .json({ message: "Product created: ", nProduct });
+            .status(201)
+            .json({ message: "Product created. ", productBody });
         } else {
-          const pBody = await ProductService.createProduct(pBody);
+          const productBody = await ProductService.createProduct(product);
           return res
-            .status(200)
-            .json({ message: "Product created: ", productBody });
+            .status(201)
+            .json({ message: "Product created. ", productBody });
         }
       } else {
         return res.status(400).json({
           message:
-            "Product already exists. Please update product if you want to modify its values.",
+            "Error - Product already exists. Please update product if you want to modify its values.",
         });
       }
     }
   } catch (err) {
-    req.logger.error(`Error in product.controller.js - line 71 - ${err}`);
+    req.logger.error(err);
     return res
       .status(500)
       .json({ message: "There was an error creating a product." });
@@ -78,7 +85,7 @@ export const createProduct = async (req, res) => {
 export const updateProductById = async (req, res) => {
   try {
     const { pid } = req.params;
-    const pBody = req.body;
+    const productBody = req.body;
 
     if (!validationUtils.validateProductBody(productBody)) {
       return res.status(400).json({
@@ -86,13 +93,16 @@ export const updateProductById = async (req, res) => {
           "Only the following product fields can be modified: title, description, code, price, status, stock and category.",
       });
     } else {
-      const uProduct = await ProductService.updateProduct(pid, pBody);
+      // console.log(productBody);
+      return res.status(200).json({ message: "Product updated." });
+      // const updatedProduct = await ProductService.updateProduct(pid, productBody);
 
-      if (!uProduct) {
-        return res.status(404).json({ message: "Error: Product not found." });
-      } else {
-        return res.status(200).json({ message: "Product Updated: ", uProduct });
-      }
+      // if (!updatedProduct) {
+      //   return res.status(404).json({ message: "Error: Product not found." });
+      // } else {
+      //   // Actualizar producto en base al body:
+      //   return res.status(200).json({ message: "Product Updated: ", updatedProduct });
+      // }
     }
   } catch (err) {
     req.logger.error(`Error in product.controller.js - line 100 - ${err}`);
@@ -108,35 +118,34 @@ export const deleteProductById = async (req, res) => {
     const product = await ProductService.getProduct(pid);
 
     if (!product) {
-      return res.status(404).json({ message: "Error: Product not found." });
+      return res.status(404).json({ message: "Error - Product not found." });
     } else {
-      // REVISAR NOMBRE DE MÉTODO DEL REPOSITORIO:
-      const fUser = await SessionService.findUserById(req.user.user.id);
-
-      if (fUser.role === "premium") {
-        if (product.owner !== String(fUser._id)) {
-          return res.status(400).json({
+      const findUser = await SessionService.findUser(null, req.user.user.id);
+      // Un usuario premium sólo pueda borrar los productos que le pertenecen:
+      if (req.user.user.role.toLowerCase() === "premium") {
+        if (product.owner !== String(findUser._id)) {
+          return res.status(403).json({
             message:
-              "Premium users cannot delete products created by the admin.",
+              "Error - Premium users cannot delete products created by the admin.",
           });
         } else {
-          const dProduct = await ProductService.deleteProduct(pid);
+          const deletedProduct = await ProductService.deleteProduct(pid);
           return res.status(200).json({
             message: "Product deleted",
-            dProduct,
+            deletedProduct,
           });
         }
       }
-      const dProduct = await ProductService.deleteProduct(pid);
+      const deletedProduct = await ProductService.deleteProduct(pid);
       return res.status(200).json({
-        message: "Product deleted",
-        dProduct,
+        message: "Product deleted.",
+        deletedProduct,
       });
     }
   } catch (err) {
-    req.logger.error(`Error in product.controller.js - line 150 - ${err}`);
+    req.logger.error(err);
     return res
       .status(500)
-      .json({ message: "There was an error creating a product." });
+      .json({ message: "There was an error deleting a product." });
   }
 };

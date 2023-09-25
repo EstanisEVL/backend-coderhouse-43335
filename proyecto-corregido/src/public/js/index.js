@@ -1,6 +1,7 @@
 const addToCartButtons = document.querySelectorAll(".add-btn");
 const removeFromCartButtons = document.querySelectorAll(".delete-btn");
 const purchaseCartButtons = document.querySelectorAll(".submit-btn");
+const deleteProductButtons = document.querySelectorAll(".delete-product-btn");
 
 const addToCart = async (e) => {
   const cid = e.target.attributes["data-cart-id"].value;
@@ -60,6 +61,24 @@ const confirmPurchase = async (e) => {
   }
 };
 
+const deleteProduct = async (e) => {
+  const pid = e.target.attributes["data-product-id"].value;
+  try {
+    const res = await fetch(`/api/products/${pid}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      location.reload();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 addToCartButtons.forEach((button) => {
   button.addEventListener("click", addToCart);
 });
@@ -68,4 +87,7 @@ removeFromCartButtons.forEach((button) => {
 });
 purchaseCartButtons.forEach((button) => {
   button.addEventListener("click", confirmPurchase);
+});
+deleteProductButtons.forEach((button) => {
+  button.addEventListener("click", deleteProduct);
 });

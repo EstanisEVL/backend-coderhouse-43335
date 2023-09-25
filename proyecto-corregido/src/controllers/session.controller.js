@@ -344,7 +344,9 @@ export const getCurrentUser = async (req, res) => {
       return res.status(401).redirect("/login");
     } else {
       const authDto = new AuthDTO(req.user);
-      return res.status(200).json({ message: `Current user: ${authDto.email} || Role: ${authDto.role}`,  });
+      return res.status(200).json({
+        message: `Current user: ${authDto.email} || Role: ${authDto.role}`,
+      });
     }
   } catch (err) {
     req.logger.error(`Error in session.controller.js - line 349 - ${err}`);
@@ -356,7 +358,7 @@ export const getCurrentUser = async (req, res) => {
 
 export const githubLogin = async (req, res) => {
   try {
-    console.log("Iniciar sesión con github");
+    req.logger.info("Iniciar sesión con github");
   } catch (err) {
     req.logger.error(`Error in session.controller.js - line 359 - ${err}`);
     return res
@@ -368,63 +370,125 @@ export const githubLogin = async (req, res) => {
 export const getGithubUser = async (req, res) => {
   try {
     const githubUser = req.user;
-    const userCart = githubUser.carts.map((cart) => {
-      return String(cart._id);
-    });
 
-    const cart = await CartService.getCartById(String(userCart[0]));
+    if (githubUser.carts.length === 0) {
+      const newCart = new CartDTO();
+      const cart = await CartService.createCart(newCart);
+      const createdCart = await CartService.getCartById(String(cart._id));
+      githubUser.carts.push(createdCart);
+      await githubUser.save();
 
-    const signUser = {
-      first_name: githubUser.first_name,
-      last_name: githubUser.last_name,
-      email: githubUser.email,
-      age: githubUser.age,
-      role: githubUser.role,
-      id: String(githubUser._id),
-      carts: cart,
-    };
+      const signUser = {
+        first_name: githubUser.first_name,
+        last_name: githubUser.last_name,
+        email: githubUser.email,
+        age: githubUser.age,
+        role: githubUser.role,
+        id: String(githubUser._id),
+        carts: createdCart,
+      };
 
-    const token = await generateJwt({ ...signUser });
-    req.user = { ...signUser };
-    const user = new UserDTO(req.user);
-    let productsInCart = [];
+      const token = await generateJwt({ ...signUser });
+      req.user = { ...signUser };
+      const user = new UserDTO(req.user);
 
-    if (user.userCarts.products.length > 0) {
-      const updatedProductsInCart = user.userCarts.products.map(
-        (prod) => new ProductDTO(prod.product, user.userCarts._id.toHexString())
+      let productsInCart = [];
+
+      if (user.userCarts.products.length > 0) {
+        const updatedProductsInCart = user.userCarts.products.map(
+          (prod) =>
+            new ProductDTO(prod.product, user.userCarts._id.toHexString())
+        );
+        productsInCart = updatedProductsInCart;
+      }
+
+      const docs = await ProductService.getAllProducts();
+      const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
+      const productsRender = filteredDocs.map(
+        (prod) => new ProductDTO(prod, user.userCarts._id.toHexString())
       );
-      productsInCart = updatedProductsInCart;
+
+      return res
+        .status(200)
+        .cookie("Cookie", token, {
+          maxAge: 60 * 60 * 1000,
+          httpOnly: true,
+        })
+        .render("profile", {
+          style: "styles.css",
+          first_name: user.fullName,
+          age: user.age,
+          email: user.email,
+          role: user.role,
+          cid: String(cart._id),
+          carts: user.userCarts,
+          productsTitle:
+            productsInCart.length === 0 || !user.userCarts
+              ? "El carrito está vacío"
+              : "Productos en el carrito:",
+          productsInCart: productsInCart,
+          products: productsRender,
+        });
+    } else {
+      const cart = githubUser.carts.map((cart) => String(cart._id));
+      const findCart = await CartService.getCartById(String(cart));
+
+      const signUser = {
+        first_name: githubUser.first_name,
+        last_name: githubUser.last_name,
+        email: githubUser.email,
+        age: githubUser.age,
+        role: githubUser.role,
+        id: String(githubUser._id),
+        carts: findCart,
+      };
+
+      const token = await generateJwt({ ...signUser });
+      req.user = { ...signUser };
+      const user = new UserDTO(req.user);
+
+      let productsInCart = [];
+
+      if (user.userCarts.products.length > 0) {
+        const updatedProductsInCart = user.userCarts.products.map(
+          (prod) =>
+            new ProductDTO(prod.product, user.userCarts._id.toHexString())
+        );
+        productsInCart = updatedProductsInCart;
+      }
+
+      const docs = await ProductService.getAllProducts();
+      const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
+      const productsRender = filteredDocs.map(
+        (prod) => new ProductDTO(prod, user.userCarts._id.toHexString())
+      );
+
+      return res
+        .status(200)
+        .cookie("Cookie", token, {
+          maxAge: 60 * 60 * 1000,
+          httpOnly: true,
+        })
+        .render("profile", {
+          style: "styles.css",
+          first_name: user.fullName,
+          age: user.age,
+          email: user.email,
+          role: user.role,
+          cid: String(cart._id),
+          carts: user.userCarts,
+          productsTitle:
+            productsInCart.length === 0 || !user.userCarts
+              ? "El carrito está vacío"
+              : "Productos en el carrito:",
+          productsInCart: productsInCart,
+          products: productsRender,
+        });
     }
-
-    const docs = await ProductService.getAllProducts();
-    const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
-    const productsRender = filteredDocs.map(
-      (prod) => new ProductDTO(prod, user.userCarts._id.toHexString())
-    );
-
-    return res
-      .status(200)
-      .cookie("Cookie", token, {
-        maxAge: 60 * 60 * 1000,
-        httpOnly: true,
-      })
-      .render("profile", {
-        style: "styles.css",
-        first_name: user.fullName,
-        age: user.age,
-        email: user.email,
-        role: user.role,
-        cid: String(cart._id),
-        carts: user.userCarts,
-        productsTitle:
-          productsInCart.length === 0 || !user.userCarts
-            ? "El carrito está vacío"
-            : "Productos en el carrito:",
-        productsInCart: productsInCart,
-        products: productsRender,
-      });
   } catch (err) {
-    req.logger.error(`Error in session.controller.js - line 427 - ${err}`);
+    req.logger.error(
+      `Error in session.controller.js - getGithubUser method - ${err}`
+    );
     return res
       .status(500)
       .json({ message: "There was an error getting current GitHub user." });

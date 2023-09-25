@@ -59,8 +59,7 @@ app.listen(PORT_APP, () => {
 -----------------------------------------------------------------
 - Hay detalles que todavía no funcionan: (Son muy de lógica de negocios) lo mas importantes son los de arriba..
 
-    login github
-    /profile o /current
+  /profile o /current
 
 tira errores de tu sessionService
 
@@ -84,9 +83,9 @@ rápido. Vas a tener un codigo mas limpio.
 
 ---------------------------------------------------------------
 
-- CORREGIR RUTAS DE GITHUB Y SUS MÉTODOS
+- CORREGIR ERROR DE ACCESS TOKEN DE GITHUB CUANDO EL USUARIO INTENTA AGREGAR O QUITAR PRODUCTOS DEL CARRITO
 
-- MEJORAR ESTILOS DE VISTA DE ADMIN
+- AGREGAR FUNCIONALIDADES A BOTONES DE PANEL ADMIN
 
 - IMPLEMENTAR DAO EN FILE SYSTEM:
 Completar métodos de File System.
@@ -107,15 +106,11 @@ eliminarlo
 
 cuando estan privado git guardian no molesta
 
+- RESPONSIVE: PROFILE
+
 -----------------------------------------------------------------
 
 Algunas cosas no puedo probarlas desde el front porque no están implementadas. O están fallando.
-
-    inicio de sesion con github
-
-Todos me salta error, es como que les falta el id del carrito
-
-	http://localhost:8080/api/carts//products/64d64e95f0a8421ee857819d
 
 Lo ideal para la próxima practica integradora es lo siguiente. (va a ser la ultima antes de la entrega final)
 
@@ -130,4 +125,8 @@ Lo mas importante del front es que uno pueda registrarse y hacer todo el proceso
 Despues lo de agregar productos si sos admin o premium, eliminar, modificar o lo que sea... eso no es necesario un front.. pero si que funcionen los endpoints.
 
 Otra recomendación puede ser si usas postman, crear una colección con todos los endpoints y los datos que necesita para funcionar. Eso después lo podes compartir conmigo y con el profe. 
+
+-----------------------------------------------------------------
+
+TESTEAR ENDPOINTS CON MOCHA, CHAI Y SUPERTEST
 */

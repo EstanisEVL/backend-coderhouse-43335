@@ -2,10 +2,10 @@
   <section class="register-section">
     <div class="container">
       <div class="title-container">
-        <h1>Registro</h1>
+        <h1 class="title">Registro</h1>
       </div>
 
-      <div>
+      <div class="form-container">
         <form action="/api/sessions/register" method="post" class="form">
           <div class="form-field">
             <label for="first_name" class="form-field_label">Nombre:</label>
@@ -70,6 +70,11 @@
             <button type="submit" class="submit-btn">Enviar</button>
           </div>
         </form>
+      </div>
+      <div class="text-container">
+        <p>¿Ya tienes usuario? Haz
+          <a href="/login">click aquí</a>
+          para iniciar sesión.</p>
       </div>
     </div>
   </section>

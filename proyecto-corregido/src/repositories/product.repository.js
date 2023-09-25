@@ -1,9 +1,10 @@
+import ProductDTO from "../dtos/product.dto.js";
+
 export default class ProductRepository {
   constructor(dao) {
     this.dao = dao;
   }
 
-  // Métodos:
   getAllProducts = async () => {
     try {
       const data = await this.dao.get();
@@ -35,10 +36,9 @@ export default class ProductRepository {
 
   createProduct = async (product) => {
     try {
-      // IMPLEMENTAR DTO CON JOI:
-      // const nProduct = new ProductDTO(product);
-      // const data = await this.dao.create(nProduct);
-      // return data;
+      const newProduct = new ProductDTO(product);
+      const data = await this.dao.create(newProduct);
+      return data;
     } catch (err) {
       return err;
     }

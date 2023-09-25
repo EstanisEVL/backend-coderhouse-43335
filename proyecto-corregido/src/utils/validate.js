@@ -96,10 +96,13 @@ const validationUtils = {
       "stock",
       "category",
     ];
-    const body = Object.keys(product).filter(
-      (field) => !fields.includes(field)
-    );
-    if (body.length > 0) {
+    const productFields = Object.keys(product);
+    const invalidFields = productFields.filter((field) => {
+      !fields.includes(field);
+    });
+    // SEGUIR ACÁ: REVISAR QUE EL BODY NO CONTENGA CAMPOS INVÁLIDOS. SI LOS CONTIENE QUE LOS AGREGUE AL ARREGLO DE INVALID FIELDS
+    console.log(fields.includes());
+    if (productFields.length > 0 && invalidFields.length === 0) {
       return false;
     } else {
       return true;
@@ -108,6 +111,14 @@ const validationUtils = {
 
   validatePrice: (price) => {
     if (price <= 0) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+
+  validateUpdatedProductBody: (updatedProductBody) => {
+    if (updatedProductBody.quantity <= 0 || !updatedProductBody.operation) {
       return false;
     } else {
       return true;

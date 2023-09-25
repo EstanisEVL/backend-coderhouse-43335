@@ -43,13 +43,13 @@ const initializePassport = () => {
       async (accesToken, refreshToken, profile, done) => {
         try {
           const user = await SessionService.findUser(profile._json.email);
-          
+
           if (!user) {
             let addNewUser = {
-              first_name: profile._json.name,
+              first_name: profile._json.login,
               last_name: "",
               email: profile._json.email,
-              age: 0,
+              age: null,
               password: "",
             };
             let newUser = await userModel.create(addNewUser);
