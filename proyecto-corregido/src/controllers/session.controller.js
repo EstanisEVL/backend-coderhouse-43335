@@ -392,43 +392,13 @@ export const getGithubUser = async (req, res) => {
       req.user = { ...signUser };
       const user = new UserDTO(req.user);
 
-      let productsInCart = [];
-
-      if (user.userCarts.products.length > 0) {
-        const updatedProductsInCart = user.userCarts.products.map(
-          (prod) =>
-            new ProductDTO(prod.product, user.userCarts._id.toHexString())
-        );
-        productsInCart = updatedProductsInCart;
-      }
-
-      const docs = await ProductService.getAllProducts();
-      const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
-      const productsRender = filteredDocs.map(
-        (prod) => new ProductDTO(prod, user.userCarts._id.toHexString())
-      );
-
       return res
         .status(200)
         .cookie("Cookie", token, {
           maxAge: 60 * 60 * 1000,
           httpOnly: true,
         })
-        .render("profile", {
-          style: "styles.css",
-          first_name: user.fullName,
-          age: user.age,
-          email: user.email,
-          role: user.role,
-          cid: String(cart._id),
-          carts: user.userCarts,
-          productsTitle:
-            productsInCart.length === 0 || !user.userCarts
-              ? "El carrito está vacío"
-              : "Productos en el carrito:",
-          productsInCart: productsInCart,
-          products: productsRender,
-        });
+        .redirect(`/profile?user=${user.email}`);
     } else {
       const cart = githubUser.carts.map((cart) => String(cart._id));
       const findCart = await CartService.getCartById(String(cart));
@@ -447,43 +417,13 @@ export const getGithubUser = async (req, res) => {
       req.user = { ...signUser };
       const user = new UserDTO(req.user);
 
-      let productsInCart = [];
-
-      if (user.userCarts.products.length > 0) {
-        const updatedProductsInCart = user.userCarts.products.map(
-          (prod) =>
-            new ProductDTO(prod.product, user.userCarts._id.toHexString())
-        );
-        productsInCart = updatedProductsInCart;
-      }
-
-      const docs = await ProductService.getAllProducts();
-      const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
-      const productsRender = filteredDocs.map(
-        (prod) => new ProductDTO(prod, user.userCarts._id.toHexString())
-      );
-
       return res
         .status(200)
         .cookie("Cookie", token, {
           maxAge: 60 * 60 * 1000,
           httpOnly: true,
         })
-        .render("profile", {
-          style: "styles.css",
-          first_name: user.fullName,
-          age: user.age,
-          email: user.email,
-          role: user.role,
-          cid: String(cart._id),
-          carts: user.userCarts,
-          productsTitle:
-            productsInCart.length === 0 || !user.userCarts
-              ? "El carrito está vacío"
-              : "Productos en el carrito:",
-          productsInCart: productsInCart,
-          products: productsRender,
-        });
+        .redirect(`/profile?user=${user.email}`);
     }
   } catch (err) {
     req.logger.error(

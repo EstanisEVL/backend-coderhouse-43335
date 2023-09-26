@@ -1,3 +1,10 @@
+import ProductDTO from "../dtos/product.dto.js";
+import {
+  CartService,
+  ProductService,
+  SessionService,
+} from "../repositories/index.js";
+
 export const home = async (req, res) => {
   try {
     res.redirect("/login");
@@ -41,8 +48,43 @@ export const reset = async (req, res) => {
 
 export const profile = async (req, res) => {
   try {
-    const user = req.session.user;
-    res.status(200).render("profile", { style: "styles.css", user });
+    const githubUser = req.query;
+    const user = await SessionService.findUser(githubUser.user);
+    const cart = user.carts.map((cart) => String(cart._id));
+    const findCart = await CartService.getCartById(String(cart));
+
+    let productsInCart = [];
+
+    if (findCart.products.length > 0) {
+      const updatedProductsInCart = findCart.products.map(
+        (prod) => new ProductDTO(prod.product, findCart._id.toHexString())
+      );
+      productsInCart = updatedProductsInCart;
+    }
+
+    const docs = await ProductService.getAllProducts();
+    const filteredDocs = docs.filter((prod) => prod.owner !== user.id);
+    const productsRender = filteredDocs.map(
+      (prod) => new ProductDTO(prod, findCart._id.toHexString())
+    );
+
+    console.log(user);
+
+    res.status(200).render("profile", {
+      style: "styles.css",
+      first_name: user.first_name,
+      age: user.age || "-",
+      email: user.email,
+      role: user.role,
+      cid: String(findCart._id),
+      carts: findCart,
+      productsTitle:
+        productsInCart.length === 0 || !findCart
+          ? "El carrito está vacío"
+          : "Productos en el carrito:",
+      productsInCart: productsInCart,
+      products: productsRender,
+    });
   } catch (err) {
     req.logger.error(`Error in view.controller.js - line 47 - ${err}`);
   }

@@ -61,29 +61,12 @@ app.listen(PORT_APP, () => {
 
   /profile o /current
 
-tira errores de tu sessionService
-
-yo probe directamente con UserModel y funciona
-
 y el de api/sessions/current el que puede guardar datos es el navegador.. por postman no
 es tan asi.. todo lo que tenga que ver con session probalo con el navegador..
 
 postman para llamadas a endpoint.. no para navegar como si tenes una session en curso
 
-Todavía  tenemos tiempo hasta el final, como recomendación, para la prox entrega de
-practica integradora, (si tenes tiempo y ganas) entrega un repo nuevo pero no copies y
-pegues... 
-
-Anda agregando solo que necesitas.. de esa manera vas a practicar y mejorar muchísimo mas
-rápido. Vas a tener un codigo mas limpio.
-
 ---------------------------------------------------------------
-
-// SEGUIR EN policies.middleware.js línea 20 Y CORREGIR ERROR DEL ACCESS TOKEN:
-
----------------------------------------------------------------
-
-- CORREGIR ERROR DE ACCESS TOKEN DE GITHUB CUANDO EL USUARIO INTENTA AGREGAR O QUITAR PRODUCTOS DEL CARRITO
 
 - AGREGAR FUNCIONALIDADES A BOTONES DE PANEL ADMIN
 
@@ -129,4 +112,7 @@ Otra recomendación puede ser si usas postman, crear una colección con todos lo
 -----------------------------------------------------------------
 
 TESTEAR ENDPOINTS CON MOCHA, CHAI Y SUPERTEST
+
+-----------------------------------------------------------------
+
 */
