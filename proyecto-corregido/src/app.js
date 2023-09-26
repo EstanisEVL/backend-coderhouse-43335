@@ -89,8 +89,6 @@ eliminarlo
 
 cuando estan privado git guardian no molesta
 
-- RESPONSIVE: PROFILE
-
 -----------------------------------------------------------------
 
 Algunas cosas no puedo probarlas desde el front porque no están implementadas. O están fallando.
