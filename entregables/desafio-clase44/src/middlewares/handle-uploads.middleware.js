@@ -5,13 +5,13 @@ const handleUploads = (req, res, next) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       let folder = "documents";
-      if (String(req.body.type) === "profileImg") {
+      if (String(req.body.type).toLowerCase() === "profileimg") {
         folder = "profiles";
         cb(null, `${__dirname}/public/uploads/${folder}`);
-      } else if (String(req.body.type) === "productImg") {
+      } else if (String(req.body.type).toLowerCase() === "productimg") {
         folder = "products";
         cb(null, `${__dirname}/public/uploads/${folder}`);
-      } else if (String(req.body.type) === "document") {
+      } else if (String(req.body.type).toLowerCase() === "document") {
         folder = "documents";
         cb(null, `${__dirname}/public/uploads/${folder}`);
       } else {

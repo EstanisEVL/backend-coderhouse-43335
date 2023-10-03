@@ -83,7 +83,7 @@ export const registerUser = async (req, res) => {
       const userDTO = new UserDTO(newUser);
       return res
         .status(201)
-        .json({ message: "New user successfully registered." });
+        .json({ message: "New user successfully registered.", userDTO });
       // .redirect("/login");
     }
   } catch (err) {
